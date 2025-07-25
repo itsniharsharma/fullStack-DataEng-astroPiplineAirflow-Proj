@@ -3,9 +3,10 @@ const app = express();
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/userRoutes');
 const cors = require('cors');
+require('dotenv').config();  // <---- ADD THIS LINE
 
 app.use(cors());
-app.use(express.json()); // important to parse JSON body
+app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 .then(() => console.log("MongoDB connected"))
