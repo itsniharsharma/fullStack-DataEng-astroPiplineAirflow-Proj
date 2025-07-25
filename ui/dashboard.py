@@ -20,10 +20,9 @@ class DashboardWindow(QWidget):
         self.setWindowTitle("Astrologer Panel – AstroNihar")
         self.setGeometry(100, 100, 1200, 800)
 
-        # Main layout
         main_layout = QVBoxLayout()
-        
-        # Horoscope Viewer
+
+        # --- Horoscope Chart Viewer ---
         self.web_view = QWebEngineView()
         html_path = os.path.abspath("templates/transit.html")
         self.web_view.load(QUrl.fromLocalFile(html_path))
@@ -36,7 +35,7 @@ class DashboardWindow(QWidget):
         main_layout.addWidget(self.web_view)
         main_layout.addWidget(self.refresh_btn)
 
-        # Rashiphal Editor Section
+        # --- Rashiphala Editor Section ---
         self.tabs = QTabWidget()
         self.text_boxes = {}
 
@@ -59,11 +58,11 @@ class DashboardWindow(QWidget):
 
     def save_data(self):
         data = {sign: self.text_boxes[sign].toPlainText() for sign in SIGNS}
-        
-        # Save to rashiphal.json (optional legacy)
+
+        # Save to rashiphal.json
         save_rashiphal(data)
 
-        # ✅ Save to dataflow.json (for Airflow use)
+        # Also save to dataflow.json for Airflow or other use
         try:
             with open("dataflow.json", "w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=4)

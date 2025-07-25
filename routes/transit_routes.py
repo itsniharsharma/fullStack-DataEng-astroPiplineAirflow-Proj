@@ -94,11 +94,21 @@ def transit():
         except:
             continue
 
+    # return render_template(
+    #     'transit.html',
+    #     transit={'D1': chart_live},
+    #     fixed_chart={'D1': chart_moon},
+    #     planet_table=data['planets'],
+    #     ascendant=data['ascendant'],
+    #     data=data
+    # )
+
+
     return render_template(
-        'transit.html',
-        transit={'D1': chart_live},
-        fixed_chart={'D1': chart_moon},
-        planet_table=data['planets'],
-        ascendant=data['ascendant'],
-        data=data
-    )
+    'transit.html',
+    chart=chart_live,  # <== this is the missing key
+    fixed_chart={'D1': chart_moon},
+    planet_table=data['planets'],
+    ascendant=data['ascendant'],
+    data=data
+)
