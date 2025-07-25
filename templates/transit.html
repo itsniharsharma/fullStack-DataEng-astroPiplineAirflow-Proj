@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Horoscope Chart</title>
+    <style>
+        .chart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .planet-label {
+            font-size: 10px;
+            fill: darkblue;
+        }
+        .zodiac-label {
+            font-size: 10px;
+            fill: darkred;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Live Horoscope (Ascendant Chart)</h1>
+
+    <div class="chart-container">
+        <svg viewBox="-120 -120 240 240" width="500" height="500" style="border:1px solid #aaa;">
+            <!-- Square chart layout -->
+            <rect x="-100" y="-100" width="200" height="200" fill="white" stroke="black"/>
+            <line x1="-100" y1="-100" x2="100" y2="100" stroke="black"/>
+            <line x1="100" y1="-100" x2="-100" y2="100" stroke="black"/>
+            <line x1="0" y1="-100" x2="100" y2="0" stroke="black"/>
+            <line x1="100" y1="0" x2="0" y2="100" stroke="black"/>
+            <line x1="0" y1="100" x2="-100" y2="0" stroke="black"/>
+            <line x1="-100" y1="0" x2="0" y2="-100" stroke="black"/>
+
+            {% set positions = {
+                1:  (0, 45), 2: (-50, 70), 3: (-80, 50), 4: (-60, 0),
+                5: (-70, -50), 6: (-50, -85), 7: (0, -40), 8: (60, -80),
+                9: (90, -50), 10: (40, 0), 11: (80, 60), 12: (55, 80)
+            } %}
+
+            {% for house in range(1, 13) %}
+                {% set pos = positions[house] %}
+                {% set x = pos[0] %}
+                {% set y = -pos[1] %}
+                {% set zodiac_number = chart[house]['zodiac'] %}
+                {% set planets = chart[house]['planets'] %}
+
+                <!-- Zodiac number -->
+                <text x="{{ x }}" y="{{ y - 10 }}" class="zodiac-label" text-anchor="middle">
+                    {{ zodiac_number }}
+                </text>
+
+                <!-- Planet names -->
+                <text x="{{ x }}" y="{{ y + 5 }}" class="planet-label" text-anchor="middle">
+                    {{ planets | join(', ') }}
+                </text>
+            {% endfor %}
+        </svg>
+    </div>
+</body>
+</html>
