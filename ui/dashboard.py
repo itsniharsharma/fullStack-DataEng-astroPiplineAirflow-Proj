@@ -1,13 +1,13 @@
 import os
+import json
 from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QPushButton,
-    QTextEdit, QTabWidget, QMessageBox, QHBoxLayout
+    QTextEdit, QTabWidget, QMessageBox
 )
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtCore import QUrl
 from services.api_service import fetch_transit_chart
 from services.storage import load_rashiphal, save_rashiphal
-from services.database import save_to_db
 
 SIGNS = [
     'aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo',
@@ -59,9 +59,17 @@ class DashboardWindow(QWidget):
 
     def save_data(self):
         data = {sign: self.text_boxes[sign].toPlainText() for sign in SIGNS}
+        
+        # Save to rashiphal.json (optional legacy)
         save_rashiphal(data)
-        save_to_db(data)
-        QMessageBox.information(self, "Saved", "✅ Rashiphala saved to database!")
+
+        # ✅ Save to dataflow.json (for Airflow use)
+        try:
+            with open("dataflow.json", "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=4)
+            QMessageBox.information(self, "Saved", "✅ Rashiphala saved to dataflow.json!")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to save to dataflow.json:\n{str(e)}")
 
     def refresh_chart(self):
         try:
