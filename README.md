@@ -1,7 +1,6 @@
 # fullStack-DataEng-astroPiplineAirflow-Proj
 
 
-# AstroPipeline Full Stack Project
 
 ## Overview
 
